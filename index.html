@@ -8,14 +8,14 @@
   function reloadPlayer() {
     console.log("Scheduling player reload");
     document.getElementById('error').style.color = 'red';
+    clearPlayer();
+
     window.playerReloadTimeoutId = setTimeout(function() {
       console.log("Reloading player");
       delete window.playerReloadTimeoutId;
       startPlayer();
     }, 500);
   }
-
-
   function startPlayer() {
     console.log("Starting player");
     document.getElementById('error').style.color = 'white';
@@ -27,6 +27,13 @@
   }
 
 
+  function clearPlayer() {      
+    window.player.onerror = undefined;
+    window.player.onended = undefined;
+    window.player.pause();
+    window.player.src = '';
+    delete window.player;
+  }
   function stopPlayer() {
     console.log("Stopping player");
     if(window.playerReloadTimeoutId) {
@@ -35,24 +42,15 @@
       delete window.playerReloadTimeoutId;
     }
     document.getElementById('error').style.color = 'white';
-
-    window.player.onerror = undefined;
-    window.player.onended = undefined;
-    window.player.pause();
-    window.player.src = '';
-    delete window.player;
+    clearPlayer();
   }
-
-
   function togglePlayer() {
     var button = document.getElementById('button');
     if (button.innerHTML !== '||') {
       button.innerHTML = "||";
       startPlayer();
-
     } else {
       button.innerHTML = "&#9656;";
-
       stopPlayer();
     }
   }
